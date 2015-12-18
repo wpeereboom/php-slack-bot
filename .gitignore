@@ -1,5 +1,7 @@
 *~
+index.php
 bot.php
 composer.phar
 composer.lock
+.idea/
 vendor

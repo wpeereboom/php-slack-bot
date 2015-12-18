@@ -118,6 +118,7 @@ class Bot {
                           new \PhpSlackBot\Command\CountCommand,
                           new \PhpSlackBot\Command\DateCommand,
                           new \PhpSlackBot\Command\PokerPlanningCommand,
+                          new \PhpSlackBot\Command\LunchPlanningCommand,
                           );
         foreach ($commands as $command) {
             if (!isset($this->commands[$command->getName()])) {
@@ -129,14 +130,22 @@ class Bot {
     private function getCommand($data) {
         if (isset($data['text'])) {
             $argsOffset = 0;
+
+            $args = array_values(array_filter(explode(' ', $data['text'])));
             if (strpos($data['text'], '<@'.$this->context['self']['id'].'>') === 0) {
+
+//                foreach ($args as $part) {
+//                    if (in_array($part, ['holiday', 'home'])) {
+//                        return new \PhpSlackBot\Command\NotHereCommand;
+//                    }
+//                }
                 $argsOffset = 1;
             }
-            $args = array_values(array_filter(explode(' ', $data['text'])));
+
             if (isset($args[$argsOffset])) {
                 foreach ($this->commands as $commandName => $availableCommand) {
                     if ($args[$argsOffset] == $commandName) {
-                        return $this->commands[$commandName];
+                        return $availableCommand;
                     }
                 }
             }
